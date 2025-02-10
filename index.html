@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Valentine Experience</title>
+    <style>
+        :root {
+            --primary-pink: #ff69b4;
+            --secondary-pink: #ff1493;
+            --heart-red: #ff3366;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Comic Neue', cursive;
+            background: linear-gradient(135deg, #fff0f5, #ffe4e1);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .section {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .visible {
+            display: flex !important;
+        }
+
+        h1 {
+            color: var(--heart-red);
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .apology-message {
+            background: rgba(255,255,255,0.9);
+            padding: 1.5rem 3rem;
+            border-radius: 20px;
+            margin: 1rem;
+            font-size: 1.4rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        #love-reasons {
+            max-width: 800px;
+            background: rgba(255,255,255,0.9);
+            padding: 2rem;
+            border-radius: 20px;
+            margin: 2rem;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .valentine-button {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        #confetti {
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .apology-message { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div id="loading" class="section visible">
+        <h1>Loading My Heart 💖</h1>
+        <div class="loader"></div>
+    </div>
+
+    <div id="apologies" class="section"></div>
+    
+    <div id="reasons-section" class="section">
+        <div id="love-reasons"></div>
+    </div>
+
+    <div id="final-loading" class="section">
+        <h1>Preparing Final Surprise 💝</h1>
+        <div class="loader"></div>
+    </div>
+
+    <div id="final-question" class="section">
+        <h1>Ready for the Big Question? 💌</h1>
+        <div class="button-group">
+            <button id="btn-yes" class="valentine-button" style="background: var(--heart-red); color: white;">YES 😍</button>
+            <button id="btn-no" class="valentine-button" style="background: #8b0000; color: white;">NO 😢</button>
+        </div>
+    </div>
+
+    <div id="proposal" class="section">
+        <h1>Be My Valentine? 💘</h1>
+        <div class="button-group">
+            <button id="proposal-yes" class="valentine-button" style="background: var(--heart-red); color: white;">YES 😍</button>
+            <button id="proposal-no" class="valentine-button" style="background: #8b0000; color: white;">NO 😢</button>
+        </div>
+    </div>
+
+    <canvas id="confetti"></canvas>
+
+    <script>
+        // Configuration
+        const stages = {
+            LOADING: 'loading',
+            APOLOGIES: 'apologies',
+            REASONS: 'reasons-section',
+            FINAL_LOADING: 'final-loading',
+            FINAL_QUESTION: 'final-question',
+            PROPOSAL: 'proposal'
+        };
+
+        let currentStage = stages.LOADING;
+        let noClicks = 0;
+        let proposalNoClicks = 0;
+
+        // Initialization
+        function init() {
+            setupEventListeners();
+            simulateLoading();
+        }
+
+        function setupEventListeners() {
+            document.getElementById('btn-yes').addEventListener('click', () => showStage(stages.PROPOSAL));
+            document.getElementById('btn-no').addEventListener('click', handleNoClick);
+            document.getElementById('proposal-yes').addEventListener('click', showFinalMessage);
+            document.getElementById('proposal-no').addEventListener('click', handleProposalNo);
+        }
+
+        function simulateLoading() {
+            setTimeout(() => {
+                showStage(stages.APOLOGIES);
+                showApologies();
+            }, 3000);
+        }
+
+        function showStage(stage) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('visible'));
+            document.getElementById(stage).classList.add('visible');
+            currentStage = stage;
+        }
+
+        function showApologies() {
+            const apologies = [
+                "💔 I'm sorry for not always listening",
+                "🌹 I regret not appreciating you enough",
+                "🌸 I apologize for my impatience",
+                "💌 I'm sorry for missed 'I love you's",
+                "🎀 I vow to be more attentive"
+            ];
+
+            const container = document.getElementById('apologies');
+            let index = 0;
+
+            function showNext() {
+                if(index >= apologies.length) {
+                    showScrollPrompt();
+                    return;
+                }
+
+                const div = document.createElement('div');
+                div.className = 'apology-message';
+                div.textContent = apologies[index];
+                container.appendChild(div);
+
+                setTimeout(() => {
+                    div.style.opacity = '0';
+                    setTimeout(() => div.remove(), 1000);
+                }, 4000);
+
+                index++;
+                setTimeout(showNext, 5000);
+            }
+
+            showNext();
+        }
+
+        function showScrollPrompt() {
+            if(confirm("✨ Scroll down to see why I love you! ✨")) {
+                showStage(stages.REASONS);
+                showLoveReasons();
+            }
+        }
+
+        function showLoveReasons() {
+            const reasons = Array.from({length: 200}, (_, i) => 
+                `❤️ ${i+1}. ${[
+                    'Your smile lights up my world',
+                    'Your laugh is contagious',
+                    'You make me feel safe',
+                    'You inspire me to be better',
+                    'Your kindness knows no bounds',
+                    'You understand me completely',
+                    'Your hugs feel like home',
+                    'You make every day special'
+                ][i % 8]}`
+            ).join('\n');
+
+            document.getElementById('love-reasons').textContent = reasons;
+            
+            setTimeout(() => {
+                if(confirm("⏳ Please wait while I prepare something special...")) {
+                    showStage(stages.FINAL_LOADING);
+                    setTimeout(() => showStage(stages.FINAL_QUESTION), 3000);
+                }
+            }, 10000);
+        }
+
+        function handleNoClick() {
+            noClicks++;
+            const messages = [
+                "💔 Please give me another chance!",
+                "🌹 I'll do anything to make it up!",
+                "🌸 You mean everything to me!",
+                "💌 I can't imagine life without you!",
+                "🎀 My heart belongs to you!"
+            ];
+
+            if(noClicks >= 5) {
+                this.style.display = 'none';
+                alert("😭 Okay, I'll love you forever anyway...");
+            } else {
+                alert(messages[noClicks - 1]);
+                this.style.transform = `scale(${1 - (noClicks * 0.1)})`;
+            }
+        }
+
+        function handleProposalNo() {
+            proposalNoClicks++;
+            this.style.transform = `translate(
+                ${Math.random() * 100 - 50}px, 
+                ${Math.random() * 100 - 50}px
+            )`;
+
+            const messages = [
+                "😏 Nice try!",
+                "💘 Can't escape love!",
+                "💖 I'm persistent!",
+                "🌹 Love finds a way!",
+                "😘 Still here!",
+                "💪 Not giving up!",
+                "😍 You're stuck with me!",
+                "🎯 Almost there...",
+                "💌 Last chance!",
+                "💍 Choosing for us!"
+            ];
+
+            alert(messages[proposalNoClicks - 1]);
+
+            if(proposalNoClicks >= 10) {
+                this.style.display = 'none';
+            }
+        }
+
+        function showFinalMessage() {
+            startConfetti();
+            alert("💖 You've made me the happiest person! 🌹");
+        }
+
+        function startConfetti() {
+            const canvas = document.getElementById('confetti');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const confettiPieces = Array.from({length: 150}, () => ({
+                x: Math.random() * canvas.width,
+                y: -Math.random() * canvas.height,
+                color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+                size: Math.random() * 10 + 5,
+                speed: Math.random() * 3 + 2,
+                angle: Math.random() * Math.PI * 2
+            }));
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                confettiPieces.forEach(p => {
+                    p.y += p.speed;
+                    p.x += Math.cos(p.angle) * 2;
+                    
+                    ctx.fillStyle = p.color;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    if(p.y > canvas.height) p.y = -p.size;
+                });
+
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+        }
+
+        // Start the experience
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

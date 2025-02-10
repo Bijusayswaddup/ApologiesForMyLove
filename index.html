@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -37,22 +38,22 @@
             color: var(--heart-red);
             font-size: 2.5rem;
             margin-bottom: 2rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .apology-message {
-            background: rgba(255,255,255,0.9);
+            background: rgba(255, 255, 255, 0.9);
             padding: 1.5rem 3rem;
             border-radius: 20px;
             margin: 1rem;
             font-size: 1.4rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             animation: float 3s ease-in-out infinite;
         }
 
         #love-reasons {
             max-width: 800px;
-            background: rgba(255,255,255,0.9);
+            background: rgba(255, 255, 255, 0.9);
             padding: 2rem;
             border-radius: 20px;
             margin: 2rem;
@@ -85,16 +86,29 @@
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
         }
 
         @media (max-width: 768px) {
-            h1 { font-size: 2rem; }
-            .apology-message { font-size: 1.2rem; }
+            h1 {
+                font-size: 2rem;
+            }
+
+            .apology-message {
+                font-size: 1.2rem;
+            }
         }
     </style>
 </head>
+
 <body>
     <div id="loading" class="section visible">
         <h1>Loading My Heart 💖</h1>
@@ -102,7 +116,7 @@
     </div>
 
     <div id="apologies" class="section"></div>
-    
+
     <div id="reasons-section" class="section">
         <div id="love-reasons"></div>
     </div>
@@ -115,7 +129,8 @@
     <div id="final-question" class="section">
         <h1>Ready for the Big Question? 💌</h1>
         <div class="button-group">
-            <button id="btn-yes" class="valentine-button" style="background: var(--heart-red); color: white;">YES 😍</button>
+            <button id="btn-yes" class="valentine-button" style="background: var(--heart-red); color: white;">YES
+                😍</button>
             <button id="btn-no" class="valentine-button" style="background: #8b0000; color: white;">NO 😢</button>
         </div>
     </div>
@@ -123,7 +138,8 @@
     <div id="proposal" class="section">
         <h1>Be My Valentine? 💘</h1>
         <div class="button-group">
-            <button id="proposal-yes" class="valentine-button" style="background: var(--heart-red); color: white;">YES 😍</button>
+            <button id="proposal-yes" class="valentine-button" style="background: var(--heart-red); color: white;">YES
+                😍</button>
             <button id="proposal-no" class="valentine-button" style="background: #8b0000; color: white;">NO 😢</button>
         </div>
     </div>
@@ -184,7 +200,7 @@
             let index = 0;
 
             function showNext() {
-                if(index >= apologies.length) {
+                if (index >= apologies.length) {
                     showScrollPrompt();
                     return;
                 }
@@ -207,34 +223,61 @@
         }
 
         function showScrollPrompt() {
-            if(confirm("✨ Scroll down to see why I love you! ✨")) {
+            if (confirm("✨ Scroll down to see why I love you! ✨")) {
                 showStage(stages.REASONS);
                 showLoveReasons();
             }
         }
 
         function showLoveReasons() {
-            const reasons = Array.from({length: 200}, (_, i) => 
-                `❤️ ${i+1}. ${[
-                    'Your smile lights up my world',
-                    'Your laugh is contagious',
-                    'You make me feel safe',
-                    'You inspire me to be better',
-                    'Your kindness knows no bounds',
-                    'You understand me completely',
-                    'Your hugs feel like home',
-                    'You make every day special'
-                ][i % 8]}`
-            ).join('\n');
+            const loveMessages = [
+                'Your smile illuminates even my darkest days, casting warmth like morning sunlight through our curtains ☀️',
+                'Your laughter creates symphonies in my soul, a melody I want to dance to forever 🎶',
+                'In your arms, I find my sanctuary - a fortress against the world where only love exists 🏰',
+                'You inspire greatness in me, gently pushing me to heights I never dreamed possible 🚀',
+                'Your compassion flows endlessly, a river of kindness that nourishes everyone it touches 🌊',
+                'You see through my masks, understanding my silent languages better than I understand myself 🔍',
+                'Your embrace writes poetry on my skin, each touch whispering ancient love stories ✍️',
+                'You transform ordinary moments into magic, making coffee tastes like champagne kisses 🥂',
+                'Your resilience through storms teaches me the true meaning of courage ⚓',
+                'Our conversations spark supernovae of ideas, lighting new constellations in my mind 🌌',
+                'You cherish my quirks like precious artifacts, making my imperfections feel sacred 🎭',
+                'Your ambition fuels our shared dreams, building bridges to futures we will claim together 🌉',
+                'In your eyes, I see forever reflected - an endless horizon where our souls dance 🌅',
+                'Your patience weaves safety nets for my vulnerabilities, letting me fall without fear 🤸',
+                'You remember my childhood stories like sacred texts, honoring every chapter of me 📜',
+                'Your curiosity about life keeps our love fresh, always discovering new territories 🗺️',
+                'You celebrate my victories like they are your own, multiplying every joy we share 🎉',
+                'Your integrity shines brighter than diamonds, a beacon guiding us through moral seas 💎',
+                'Our silences speak volumes, comfortable and rich like aged wine in crystal 🍷',
+                'You nurture my growth like a master gardener, helping me blossom beyond limits 🌷'
+            ];
+
+            const reasons = Array.from({ length: 200 }, (_, i) => {
+                const baseMessage = loveMessages[i % 20];
+                const intensifier = [
+                    '\nThis is why my heart skips beats when you enter the room 💓',
+                    '\nYou are my living proof that miracles exist ✨',
+                    '\nWith you, I found the missing piece of my cosmic puzzle 🧩',
+                    '\nEvery day with you writes new chapters in our eternal story 📖',
+                    '\nYou make eternity feel like it might not be long enough ⏳'
+                ][i % 5];
+
+                return `❤️ ${i + 1}. ${baseMessage}${intensifier}\n\n`;
+            }).join('');
 
             document.getElementById('love-reasons').textContent = reasons;
-            
+
             setTimeout(() => {
-                if(confirm("⏳ Please wait while I prepare something special...")) {
+                if (confirm("🌹 Our love is loading infinite memories... Continue to forever?")) {
                     showStage(stages.FINAL_LOADING);
-                    setTimeout(() => showStage(stages.FINAL_QUESTION), 3000);
+                    setTimeout(() => {
+                        document.querySelector('#love-reasons').innerHTML +=
+                            '\n\n💌 Preparing our always... 💑';
+                        showStage(stages.FINAL_QUESTION);
+                    }, 3000);
                 }
-            }, 10000);
+            }, 15000);
         }
 
         function handleNoClick() {
@@ -247,7 +290,7 @@
                 "🎀 My heart belongs to you!"
             ];
 
-            if(noClicks >= 5) {
+            if (noClicks >= 5) {
                 this.style.display = 'none';
                 alert("😭 Okay, I'll love you forever anyway...");
             } else {
@@ -278,7 +321,7 @@
 
             alert(messages[proposalNoClicks - 1]);
 
-            if(proposalNoClicks >= 10) {
+            if (proposalNoClicks >= 10) {
                 this.style.display = 'none';
             }
         }
@@ -294,7 +337,7 @@
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
 
-            const confettiPieces = Array.from({length: 150}, () => ({
+            const confettiPieces = Array.from({ length: 150 }, () => ({
                 x: Math.random() * canvas.width,
                 y: -Math.random() * canvas.height,
                 color: `hsl(${Math.random() * 360}, 100%, 50%)`,
@@ -305,17 +348,17 @@
 
             function animate() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-                
+
                 confettiPieces.forEach(p => {
                     p.y += p.speed;
                     p.x += Math.cos(p.angle) * 2;
-                    
+
                     ctx.fillStyle = p.color;
                     ctx.beginPath();
                     ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
                     ctx.fill();
-                    
-                    if(p.y > canvas.height) p.y = -p.size;
+
+                    if (p.y > canvas.height) p.y = -p.size;
                 });
 
                 requestAnimationFrame(animate);
@@ -328,4 +371,5 @@
         document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
+
 </html>
